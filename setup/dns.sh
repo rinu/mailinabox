@@ -47,6 +47,22 @@ server:
 include: /etc/nsd/zones.conf
 EOF
 
+# Since we have bind9 listening on localhost for locally-generated
+# DNS queries that require a recursive nameserver, and the system
+# might have other network interfaces for e.g. tunnelling, we have
+# to be specific about the network interfaces that nsd binds to.
+for ip in $PRIVATE_IP $PRIVATE_IPV6; do
+	echo "  ip-address: $ip" >> /etc/nsd/nsd.conf;
+done
+
+# Create a directory for additional configuration directives, including
+# the zones.conf file written out by our management daemon.
+echo "include: /etc/nsd/nsd.conf.d/*.conf" >> /etc/nsd/nsd.conf;
+
+# Remove the old location of zones.conf that we generate. It will
+# now be stored in /etc/nsd/nsd.conf.d.
+rm -f /etc/nsd/zones.conf
+
 # Add log rotation
 cat > /etc/logrotate.d/nsd <<EOF;
 /var/log/nsd.log {

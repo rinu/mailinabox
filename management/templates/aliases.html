@@ -1,13 +1,13 @@
 <style>
 #alias_table .actions > * { padding-right: 3px; }
-#alias_table .alias-required .remove { display: none }
+#alias_table .alias-auto .actions > * { display: none }
 </style>
 
 <h2>Aliases</h2>
 
 <h3>Add a mail alias</h3>
 
-<p>Aliases are email forwarders. An alias can forward email to a <a href="#" onclick="return show_panel('users')">mail user</a> or to any email address.</p>
+<p>Aliases are email forwarders. An alias can forward email to a <a href="#users">mail user</a> or to any email address.</p>
 
 <p>To use an alias or any address besides your own login username in outbound mail, the sending user must be included as a permitted sender for the alias.</p>
 
@@ -163,7 +163,7 @@ function show_aliases() {
           var n = $("#alias-template").clone();
           n.attr('id', '');
 
-          if (alias.required) n.addClass('alias-required');
+          if (alias.auto) n.addClass('alias-auto');
           n.attr('data-address', alias.address_display); // this is decoded from IDNA, but will get re-coded to IDNA on the backend
           n.find('td.address').text(alias.address_display)
           for (var j = 0; j < alias.forwards_to.length; j++)
